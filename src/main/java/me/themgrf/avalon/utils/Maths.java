@@ -1,5 +1,6 @@
 package me.themgrf.avalon.utils;
 
+import me.themgrf.avalon.entities.Camera;
 import me.themgrf.avalon.renderer.EntityTransformation;
 import org.lwjgl.util.vector.Matrix4f;
 import org.lwjgl.util.vector.Vector3f;
@@ -26,6 +27,19 @@ public class Maths {
         Matrix4f.scale(new Vector3f(scale, scale, scale), matrix, matrix);
 
         return matrix;
+    }
+
+    public static Matrix4f createViewMatrix(Camera camera) {
+        Matrix4f viewMatrix = new Matrix4f();
+        viewMatrix.setIdentity();
+        Matrix4f.rotate((float) Math.toRadians(camera.getRotation().getX()), new Vector3f(1, 0, 0), viewMatrix, viewMatrix);
+        Matrix4f.rotate((float) Math.toRadians(camera.getRotation().getY()), new Vector3f(0, 1, 0), viewMatrix, viewMatrix);
+        Matrix4f.rotate((float) Math.toRadians(camera.getRotation().getZ()), new Vector3f(0, 0, 1), viewMatrix, viewMatrix);
+        Vector3f cameraPos = camera.getPosition();
+        Vector3f negativeCameraPos = new Vector3f(-cameraPos.x, -cameraPos.y, -cameraPos.z);
+        Matrix4f.translate(negativeCameraPos, viewMatrix, viewMatrix);
+
+        return viewMatrix;
     }
 
 }
