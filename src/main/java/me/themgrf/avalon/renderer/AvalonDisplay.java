@@ -16,9 +16,7 @@ public class AvalonDisplay {
         Display.destroy();
 
         if (attribs != null) {
-            attribs = new ContextAttribs(3,2);
-            attribs.withForwardCompatible(true);
-            attribs.withProfileCore(true);
+            attribs = new ContextAttribs(3,2).withForwardCompatible(true).withProfileCore(true);
         }
 
         try {
