@@ -1,5 +1,6 @@
 package me.themgrf.avalon.renderer;
 
+import me.themgrf.avalon.utils.Rotation;
 import org.lwjgl.util.vector.Vector3f;
 
 /**
@@ -9,14 +10,12 @@ import org.lwjgl.util.vector.Vector3f;
 public class EntityTransformation {
 
     private Vector3f translation;
-    private float rx, ry, rz;
+    private Rotation rotation;
     private int scale;
 
-    public EntityTransformation(Vector3f translation, float rx, float ry, float rz, int scale) {
+    public EntityTransformation(Vector3f translation, Rotation rotation, int scale) {
         this.translation = translation;
-        this.rx = rx;
-        this.ry = ry;
-        this.rz = rz;
+        this.rotation = rotation;
         this.scale = scale;
     }
 
@@ -28,28 +27,12 @@ public class EntityTransformation {
         this.translation = translation;
     }
 
-    public float getRx() {
-        return rx;
+    public Rotation getRotation() {
+        return rotation;
     }
 
-    public void setRx(float rx) {
-        this.rx = rx;
-    }
-
-    public float getRy() {
-        return ry;
-    }
-
-    public void setRy(float ry) {
-        this.ry = ry;
-    }
-
-    public float getRz() {
-        return rz;
-    }
-
-    public void setRz(float rz) {
-        this.rz = rz;
+    public void setRotation(Rotation rotation) {
+        this.rotation = rotation;
     }
 
     public int getScale() {
