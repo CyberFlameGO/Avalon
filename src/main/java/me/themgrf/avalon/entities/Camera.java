@@ -14,7 +14,8 @@ public class Camera {
             position.y += 0.02f;
         } else if (Keyboard.isKeyDown(Keyboard.KEY_S)) {
             position.y -= 0.02f;
-        } else if (Keyboard.isKeyDown(Keyboard.KEY_D)) {
+        }
+        if (Keyboard.isKeyDown(Keyboard.KEY_D)) {
             position.x += 0.02f;
         } else if (Keyboard.isKeyDown(Keyboard.KEY_A)) {
             position.x -= 0.02f;
