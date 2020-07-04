@@ -1,6 +1,5 @@
 package me.themgrf.avalon.entities;
 
-import me.themgrf.avalon.utils.Logger;
 import me.themgrf.avalon.utils.Rotation;
 import org.lwjgl.input.Keyboard;
 import org.lwjgl.input.Mouse;

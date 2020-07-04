@@ -20,14 +20,8 @@ public class AvalonDisplay {
         }
 
         try {
-            if (fullscreen) {
-                Display.setFullscreen(false);
-                Display.setDisplayMode(new DisplayMode(width, height));
-                Display.setResizable(true);
-            } else {
-                Display.setDisplayMode(Display.getDesktopDisplayMode());
-                Display.setFullscreen(true);
-            }
+            setFullscreen(fullscreen, width, height);
+
             Display.setTitle(title);
 
             TexturePack pack = Avalon.getInstance().getTexturePack();
@@ -46,6 +40,21 @@ public class AvalonDisplay {
         }
 
         GL11.glViewport(0, 0, width, height);
+    }
+
+    public static void setFullscreen(boolean fullscreen, int width, int height) {
+        try {
+            Display.setDisplayMode(new DisplayMode(width, height));
+            if (fullscreen) {
+                Display.setDisplayModeAndFullscreen(Display.getDesktopDisplayMode());
+            } else {
+                Display.setFullscreen(false);
+                Display.setResizable(true);
+            }
+        } catch (LWJGLException e) {
+            e.printStackTrace();
+        }
+
     }
 
 }

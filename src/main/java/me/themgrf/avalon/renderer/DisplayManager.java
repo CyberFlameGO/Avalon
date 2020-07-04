@@ -8,12 +8,12 @@ import org.lwjgl.opengl.*;
 public class DisplayManager {
 
     private static final String NAME = "Avalon";
-    private static final int WIDTH = 1280;
-    private static final int HEIGHT = 720;
+    private static final Resolution DEFAULT_RES = new Resolution(1280, 720);
+    private static final Resolution FULLSCREEN_RES = new Resolution(1920, 1080);
     private static final int FPS_CAP = 144;
 
     public static void createDisplay() {
-        AvalonDisplay.createDisplay(WIDTH, HEIGHT, NAME, true);
+        AvalonDisplay.createDisplay(DEFAULT_RES.getWidth(), DEFAULT_RES.getHeight(), NAME, false);
     }
 
     public static void updateDisplay() {
@@ -29,7 +29,7 @@ public class DisplayManager {
             if (Keyboard.getEventKeyState()) {
                 switch (Keyboard.getEventKey()) {
                     case Keyboard.KEY_F11:
-                        AvalonDisplay.createDisplay(WIDTH, HEIGHT, NAME, Display.isFullscreen());
+                        AvalonDisplay.setFullscreen(!Display.isFullscreen(), DEFAULT_RES.getWidth(), DEFAULT_RES.getHeight());
                         break;
                     case Keyboard.KEY_SPACE:
                         Logger.info("SPACE");

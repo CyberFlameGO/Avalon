@@ -4,10 +4,7 @@ import me.themgrf.avalon.entities.Entity;
 import me.themgrf.avalon.renderer.EntityTransformation;
 import me.themgrf.avalon.renderer.shaders.StaticShader;
 import me.themgrf.avalon.utils.Maths;
-import org.lwjgl.opengl.Display;
-import org.lwjgl.opengl.GL11;
-import org.lwjgl.opengl.GL20;
-import org.lwjgl.opengl.GL30;
+import org.lwjgl.opengl.*;
 import org.lwjgl.util.vector.Matrix4f;
 
 public class Renderer {
