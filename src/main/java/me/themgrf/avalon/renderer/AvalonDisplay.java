@@ -32,8 +32,9 @@ public class AvalonDisplay {
                         pack.readImageToBuffer(icon16),
                         pack.readImageToBuffer(icon32)
                 });
+                icon16.close();
+                icon32.close();
             }
-
             Display.create(new PixelFormat(), attribs);
         } catch (LWJGLException | IOException e) {
             e.printStackTrace();

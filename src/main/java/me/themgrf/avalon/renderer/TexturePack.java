@@ -17,7 +17,7 @@ public class TexturePack {
     }
 
     public InputStream getResourceStream(ResourceLocation resourceLocation) {
-        return TexturePack.class.getResourceAsStream("/assets/" + resourceLocation.getPath());
+        return getClass().getResourceAsStream("/assets/" + resourceLocation.getPath());
     }
 
     public ByteBuffer readImageToBuffer(InputStream imageStream) throws IOException {
