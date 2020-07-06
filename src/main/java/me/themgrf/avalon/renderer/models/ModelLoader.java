@@ -97,7 +97,7 @@ public class ModelLoader {
             indicesArray[i] = indices.get(i);
         }
 
-        return loader.loadToVAO(verticesArray, textureArray, indicesArray);
+        return loader.loadToVAO(verticesArray, textureArray, normalsArray, indicesArray);
     }
 
     public static RawModel cube(Loader loader) {
@@ -157,7 +157,7 @@ public class ModelLoader {
 
         };
 
-        return loader.loadToVAO(vertices, textureCoords, indices);
+        return loader.loadToVAO(vertices, textureCoords, vertices, indices);
     }
 
     private static void processVertex(

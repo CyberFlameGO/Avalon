@@ -2,6 +2,7 @@ package me.themgrf.avalon;
 
 import me.themgrf.avalon.entities.Camera;
 import me.themgrf.avalon.entities.Entity;
+import me.themgrf.avalon.entities.Light;
 import me.themgrf.avalon.renderer.DisplayManager;
 import me.themgrf.avalon.renderer.models.Loader;
 import me.themgrf.avalon.renderer.models.ModelLoader;
@@ -31,6 +32,7 @@ public class Start {
         Camera camera = new Camera();
 
         Entity entity = new Entity(rawModel, new Vector3f(0, -2, -25), new Rotation(0, 0, 0), 1);
+        Light light = new Light(new Vector3f(0, 5, 0), new Vector3f(1, 1, 1));
 
         while (!Display.isCloseRequested()) {
             //entity.increasePosition(0, 0, -0.002f);
@@ -40,6 +42,7 @@ public class Start {
 
             renderer.prepare();
             shader.start();
+            shader.loadLight(light);
             //renderer.render(rawModel);
             shader.loadViewMatrix(camera);
             renderer.render(entity, shader);

@@ -13,6 +13,7 @@ import java.nio.FloatBuffer;
 
 public abstract class ShaderProgram {
 
+    private final String file;
     private final int programID;
     private final int vertexShaderID;
     private final int fragmentShaderID;
@@ -20,6 +21,7 @@ public abstract class ShaderProgram {
     private static final FloatBuffer matrixBuffer = BufferUtils.createFloatBuffer(16);
 
     public ShaderProgram(String vertexFile, String fragmentFile) {
+        file = vertexFile;
         vertexShaderID = loadShader(vertexFile, GL20.GL_VERTEX_SHADER);
         fragmentShaderID = loadShader(fragmentFile, GL20.GL_FRAGMENT_SHADER);
         programID = GL20.glCreateProgram();
@@ -96,10 +98,13 @@ public abstract class ShaderProgram {
         GL20.glCompileShader(shaderID);
         if (GL20.glGetShaderi(shaderID, GL20.GL_COMPILE_STATUS) == GL11.GL_FALSE) {
             System.out.println(GL20.glGetShaderInfoLog(shaderID, 500));
-            System.err.println("Could not compile shader!");
+            System.err.println("Could not compile shader! " + file);
             System.exit(-1);
         }
         return shaderID;
     }
 
+    public String getFile() {
+        return file;
+    }
 }
