@@ -1,5 +1,7 @@
 package me.themgrf.avalon.renderer;
 
+import me.themgrf.avalon.utils.Logger;
+
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 import java.io.File;
@@ -17,7 +19,12 @@ public class TexturePack {
     }
 
     public InputStream getResourceStream(ResourceLocation resourceLocation) {
-        return getClass().getResourceAsStream("/assets/" + resourceLocation.getPath());
+        Logger.info("Fetching /assets/" + resourceLocation.getPath());
+        InputStream inputStream = getClass().getResourceAsStream("/assets/" + resourceLocation.getPath());
+        if (inputStream == null) {
+            Logger.error("Failed to load texture: " + resourceLocation.getPath());
+        }
+        return inputStream;
     }
 
     public ByteBuffer readImageToBuffer(InputStream imageStream) throws IOException {

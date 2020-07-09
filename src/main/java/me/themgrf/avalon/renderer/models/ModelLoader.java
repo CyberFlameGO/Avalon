@@ -78,7 +78,6 @@ public class ModelLoader {
                 line = bufferedReader.readLine();
             }
             bufferedReader.close();
-
         } catch (Exception e) {
             e.printStackTrace();
         }

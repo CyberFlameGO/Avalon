@@ -4,11 +4,9 @@ import me.themgrf.avalon.entities.Camera;
 import me.themgrf.avalon.entities.Entity;
 import me.themgrf.avalon.entities.Light;
 import me.themgrf.avalon.renderer.DisplayManager;
-import me.themgrf.avalon.renderer.models.Loader;
-import me.themgrf.avalon.renderer.models.ModelLoader;
-import me.themgrf.avalon.renderer.models.RawModel;
-import me.themgrf.avalon.renderer.models.Renderer;
+import me.themgrf.avalon.renderer.models.*;
 import me.themgrf.avalon.renderer.shaders.StaticShader;
+import me.themgrf.avalon.renderer.textures.ModelTexture;
 import me.themgrf.avalon.utils.Rotation;
 import org.lwjgl.opengl.Display;
 import org.lwjgl.util.vector.Vector3f;
@@ -29,21 +27,26 @@ public class Start {
         //RawModel cube = ModelLoader.cube(loader);
         RawModel rawModel = ModelLoader.loadModel("test/stall", loader);
 
-        Camera camera = new Camera();
+        ModelTexture texture = new ModelTexture(loader.loadTexture("test/stall"));
+        texture.setShineDamper(5);
+        texture.setReflectivity(0.2f);
 
-        Entity entity = new Entity(rawModel, new Vector3f(0, -2, -25), new Rotation(0, 0, 0), 1);
+        TexturedModel texturedModel = new TexturedModel(rawModel, texture);
+
+        Camera camera = new Camera(); // Player
+
+        Entity entity = new Entity(texturedModel, new Vector3f(0, -2, -25), new Rotation(0, 180, 0), 1);
         Light light = new Light(new Vector3f(0, 5, 0), new Vector3f(1, 1, 1));
 
         while (!Display.isCloseRequested()) {
             //entity.increasePosition(0, 0, -0.002f);
-            entity.increaseRotation(new Rotation(0, 1, 0));
+            entity.increaseRotation(new Rotation(0, 0.2f, 0));
             camera.move();
-            //entity.increaseRotation(new Rotation(1, 0, 0));
+            light.setPosition(camera.getPosition());
 
             renderer.prepare();
             shader.start();
             shader.loadLight(light);
-            //renderer.render(rawModel);
             shader.loadViewMatrix(camera);
             renderer.render(entity, shader);
             shader.stop();

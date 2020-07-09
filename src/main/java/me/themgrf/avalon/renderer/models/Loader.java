@@ -1,11 +1,16 @@
 package me.themgrf.avalon.renderer.models;
 
+import de.matthiasmann.twl.utils.PNGDecoder;
+import me.themgrf.avalon.Avalon;
+import me.themgrf.avalon.renderer.ResourceLocation;
 import org.lwjgl.BufferUtils;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL15;
 import org.lwjgl.opengl.GL20;
 import org.lwjgl.opengl.GL30;
 
+import java.io.IOException;
+import java.nio.ByteBuffer;
 import java.nio.FloatBuffer;
 import java.nio.IntBuffer;
 import java.util.ArrayList;
@@ -15,6 +20,7 @@ public class Loader {
 
     private final List<Integer> vaos = new ArrayList<>();
     private final List<Integer> vbos = new ArrayList<>();
+    private final List<Integer> textures = new ArrayList<>();
 
     public RawModel loadToVAO(float[] positions, float[] textureCoords, float[] normals, int[] indices) {
         int vaoID = createVAO();
@@ -26,12 +32,38 @@ public class Loader {
         return new RawModel(vaoID, indices.length);
     }
 
+    public int loadTexture(String fileName){
+        try {
+            //load png file
+            PNGDecoder decoder = new PNGDecoder(Avalon.getInstance().getTexturePack().getResourceStream(new ResourceLocation("textures/" + fileName + ".png")));
+
+            //create a byte buffer big enough to store RGBA values
+            ByteBuffer buffer = ByteBuffer.allocateDirect(4 * decoder.getWidth() * decoder.getHeight());
+
+            //decode
+            decoder.decode(buffer, decoder.getWidth() * 4, PNGDecoder.Format.RGBA);
+
+            //flip the buffer so its ready to read
+            buffer.flip();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        int id = GL11.glGenTextures(); //create a texture
+        textures.add(id);
+
+        return id;
+    }
+
     public void cleanUp() {
         for (int vao : vaos) {
             GL30.glDeleteVertexArrays(vao);
         }
         for (int vbo : vbos) {
             GL15.glDeleteBuffers(vbo);
+        }
+        for (int texture : textures) {
+            GL11.glDeleteTextures(texture);
         }
     }
 

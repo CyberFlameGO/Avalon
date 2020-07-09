@@ -3,6 +3,7 @@ package me.themgrf.avalon.renderer.models;
 import me.themgrf.avalon.entities.Entity;
 import me.themgrf.avalon.renderer.EntityTransformation;
 import me.themgrf.avalon.renderer.shaders.StaticShader;
+import me.themgrf.avalon.renderer.textures.ModelTexture;
 import me.themgrf.avalon.utils.Maths;
 import org.lwjgl.opengl.*;
 import org.lwjgl.util.vector.Matrix4f;
@@ -29,8 +30,9 @@ public class Renderer {
     }
 
     public void render(Entity entity, StaticShader shader) {
-        RawModel model = entity.getModel();
-        GL30.glBindVertexArray(model.getVaoID());
+        TexturedModel texturedModel = entity.getTexturedModel();
+        RawModel rawModel = texturedModel.getRawModel();
+        GL30.glBindVertexArray(rawModel.getVaoID());
         GL20.glEnableVertexAttribArray(0);
         GL20.glEnableVertexAttribArray(1);
         GL20.glEnableVertexAttribArray(2);
@@ -39,7 +41,12 @@ public class Renderer {
         );
         shader.loadTransformationMatrix(transformationMatrix);
 
-        GL11.glDrawElements(GL11.GL_TRIANGLES, model.getVortexCount(), GL11.GL_UNSIGNED_INT, 0);
+        ModelTexture modelTexture = texturedModel.getModelTexture();
+        shader.loadShineVariables(modelTexture.getShineDamper(), modelTexture.getReflectivity());
+
+        GL13.glActiveTexture(GL13.GL_TEXTURE0);
+        GL11.glBindTexture(GL11.GL_TEXTURE_2D, modelTexture.getTextureID());
+        GL11.glDrawElements(GL11.GL_TRIANGLES, rawModel.getVortexCount(), GL11.GL_UNSIGNED_INT, 0);
         GL20.glDisableVertexAttribArray(0);
         GL20.glDisableVertexAttribArray(1);
         GL20.glDisableVertexAttribArray(2);
@@ -60,7 +67,6 @@ public class Renderer {
         projectionMatrix.m32 = -((2 * NEAR_PLANE * FAR_PLANE) / frustrum_length);
         projectionMatrix.m33 = 0;
     }
-
 
     @Deprecated
     public void render(RawModel model) {

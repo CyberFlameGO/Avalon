@@ -1,11 +1,13 @@
 package me.themgrf.avalon.entities;
 
 import me.themgrf.avalon.renderer.models.RawModel;
+import me.themgrf.avalon.renderer.models.TexturedModel;
 import me.themgrf.avalon.utils.Rotation;
 import org.lwjgl.util.vector.Vector3f;
 
 public class Entity {
 
+    private TexturedModel texturedModel;
     private RawModel model;
     private Vector3f position;
     private Rotation rotation;
@@ -13,6 +15,14 @@ public class Entity {
 
     public Entity(RawModel model, Vector3f position, Rotation rotation, int scale) {
         this.model = model;
+        this.position = position;
+        this.rotation = rotation;
+        this.scale = scale;
+    }
+
+    public Entity(TexturedModel texturedModel, Vector3f position, Rotation rotation, int scale) {
+        this.texturedModel = texturedModel;
+        this.model = texturedModel.getRawModel();
         this.position = position;
         this.rotation = rotation;
         this.scale = scale;
@@ -28,6 +38,14 @@ public class Entity {
                 this.rotation.getY() + rotation.getY(),
                 this.rotation.getZ() + rotation.getZ()
         ));
+    }
+
+    public TexturedModel getTexturedModel() {
+        return texturedModel;
+    }
+
+    public void setTexturedModel(TexturedModel texturedModel) {
+        this.texturedModel = texturedModel;
     }
 
     public RawModel getModel() {
