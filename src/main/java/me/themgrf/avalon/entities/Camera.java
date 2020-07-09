@@ -16,14 +16,14 @@ public class Camera {
         float increment = 0.02f;
         float total = increment * multiplier;
 
-        if (Keyboard.isKeyDown(Keyboard.KEY_W)) {
+        if (Keyboard.isKeyDown(Keyboard.KEY_W) || Keyboard.isKeyDown(Keyboard.KEY_UP)) {
             position.y += total;
-        } else if (Keyboard.isKeyDown(Keyboard.KEY_S)) {
+        } else if (Keyboard.isKeyDown(Keyboard.KEY_S) || Keyboard.isKeyDown(Keyboard.KEY_DOWN)) {
             position.y -= total;
         }
-        if (Keyboard.isKeyDown(Keyboard.KEY_D)) {
+        if (Keyboard.isKeyDown(Keyboard.KEY_D) || Keyboard.isKeyDown(Keyboard.KEY_RIGHT)) {
             position.x += total;
-        } else if (Keyboard.isKeyDown(Keyboard.KEY_A)) {
+        } else if (Keyboard.isKeyDown(Keyboard.KEY_A) || Keyboard.isKeyDown(Keyboard.KEY_LEFT)) {
             position.x -= total;
         }
 
