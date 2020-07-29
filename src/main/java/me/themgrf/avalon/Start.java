@@ -11,6 +11,8 @@ import me.themgrf.avalon.utils.Rotation;
 import org.lwjgl.opengl.Display;
 import org.lwjgl.util.vector.Vector3f;
 
+import java.io.IOException;
+
 public class Start {
 
     public static void main(String[] args) {
@@ -27,9 +29,15 @@ public class Start {
         //RawModel cube = ModelLoader.cube(loader);
         RawModel rawModel = ModelLoader.loadModel("test/stall", loader);
 
-        ModelTexture texture = new ModelTexture(loader.loadTexture("test/stall"));
-        texture.setShineDamper(5);
-        texture.setReflectivity(0.2f);
+        ModelTexture texture = null;
+        try {
+            texture = new ModelTexture(loader.loadTexture("test/stall"));
+
+            texture.setShineDamper(5);
+            texture.setReflectivity(0.2f);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
 
         TexturedModel texturedModel = new TexturedModel(rawModel, texture);
 

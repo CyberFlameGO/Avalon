@@ -1,8 +1,10 @@
 package me.themgrf.avalon.renderer.models;
 
+import com.jogamp.opengl.GL;
 import de.matthiasmann.twl.utils.PNGDecoder;
 import me.themgrf.avalon.Avalon;
 import me.themgrf.avalon.renderer.ResourceLocation;
+import me.themgrf.avalon.renderer.textures.Texture;
 import org.lwjgl.BufferUtils;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL15;
@@ -32,25 +34,29 @@ public class Loader {
         return new RawModel(vaoID, indices.length);
     }
 
-    public int loadTexture(String fileName){
-        try {
-            //load png file
-            PNGDecoder decoder = new PNGDecoder(Avalon.getInstance().getTexturePack().getResourceStream(new ResourceLocation("textures/" + fileName + ".png")));
+    public int loadTexture(String fileName) throws IOException {
+        // Load the png file
+        PNGDecoder decoder = new PNGDecoder(Avalon.getInstance().getTexturePack().getResourceStream(new ResourceLocation("textures/" + fileName + ".png")));
 
-            //create a byte buffer big enough to store RGBA values
-            ByteBuffer buffer = ByteBuffer.allocateDirect(4 * decoder.getWidth() * decoder.getHeight());
+        // Create a byte buffer for RGBA values
+        ByteBuffer buffer = ByteBuffer.allocateDirect(4 * decoder.getWidth() * decoder.getHeight());
+        decoder.decode(buffer, decoder.getWidth() * 4, PNGDecoder.Format.RGBA);
 
-            //decode
-            decoder.decode(buffer, decoder.getWidth() * 4, PNGDecoder.Format.RGBA);
+        buffer.flip(); // Flip the buffer to read
 
-            //flip the buffer so its ready to read
-            buffer.flip();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        int id = GL11.glGenTextures(); // Create a texture
+        GL11.glBindTexture(GL11.GL_TEXTURE_2D, id); // Bind the texture
+        GL11.glPixelStorei(GL11.GL_UNPACK_ALIGNMENT, 1); // Tell OpenGL how to unpack bytes
 
-        int id = GL11.glGenTextures(); //create a texture
-        textures.add(id);
+        // Set the texture parameters, can be GL_LINEAR or GL_NEAREST
+        GL11.glTexParameterf(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_MIN_FILTER, GL11.GL_LINEAR);
+        GL11.glTexParameterf(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_MAG_FILTER, GL11.GL_LINEAR);
+
+        // Upload texture
+        GL11.glTexImage2D(GL11.GL_TEXTURE_2D, 0, GL11.GL_RGBA, decoder.getWidth(), decoder.getHeight(), 0, GL11.GL_RGBA, GL11.GL_UNSIGNED_BYTE, buffer);
+
+        // Generate Mip Map
+        GL30.glGenerateMipmap(GL11.GL_TEXTURE_2D);
 
         return id;
     }
