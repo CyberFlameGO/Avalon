@@ -19,10 +19,11 @@ public class TexturePack {
     }
 
     public InputStream getResourceStream(ResourceLocation resourceLocation) {
-        Logger.info("Fetching /assets/" + resourceLocation.getPath());
-        InputStream inputStream = getClass().getResourceAsStream("/assets/" + resourceLocation.getPath());
+        String path = "/assets/" + resourceLocation.getDomain() + "/" + resourceLocation.getPath();
+        Logger.info("Fetching " + path);
+        InputStream inputStream = getClass().getResourceAsStream(path);
         if (inputStream == null) {
-            Logger.error("Failed to load texture: " + resourceLocation.getPath());
+            Logger.error("Failed to load texture: " + path);
         }
         return inputStream;
     }
