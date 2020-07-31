@@ -23,7 +23,7 @@ public class Maths {
         Matrix4f.rotate((float) Math.toRadians(rotation.getY()), new Vector3f(0, 1, 0), matrix, matrix);
         Matrix4f.rotate((float) Math.toRadians(rotation.getZ()), new Vector3f(0, 0, 1), matrix, matrix);
 
-        int scale = transformation.getScale();
+        float scale = transformation.getScale();
         Matrix4f.scale(new Vector3f(scale, scale, scale), matrix, matrix);
 
         return matrix;

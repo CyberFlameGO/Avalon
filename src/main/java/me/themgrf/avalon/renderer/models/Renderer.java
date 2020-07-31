@@ -8,6 +8,9 @@ import me.themgrf.avalon.utils.Maths;
 import org.lwjgl.opengl.*;
 import org.lwjgl.util.vector.Matrix4f;
 
+import java.util.HashMap;
+import java.util.List;
+
 public class Renderer {
 
     private static final float FOV = 70;
@@ -15,8 +18,13 @@ public class Renderer {
     private static final float FAR_PLANE = 1000;
 
     private Matrix4f projectionMatrix;
+    private final StaticShader shader;
 
     public Renderer(StaticShader shader) {
+        this.shader = shader;
+
+        GL11.glEnable(GL11.GL_CULL_FACE);
+        GL11.glCullFace(GL11.GL_BACK);
         createProjectionMatrix();
         shader.start();
         shader.loadProjectionMatrix(projectionMatrix);
@@ -29,28 +37,44 @@ public class Renderer {
         GL11.glClearColor(0, 0, 0, 1);
     }
 
-    public void render(Entity entity, StaticShader shader) {
-        TexturedModel texturedModel = entity.getTexturedModel();
+    public void render(HashMap<TexturedModel, List<Entity>> entities) {
+        for (TexturedModel texturedModel : entities.keySet()) {
+            prepareTexturedModel(texturedModel);
+            List<Entity> batch = entities.get(texturedModel);
+            for (Entity entity : batch) {
+                prepareInstance(entity);
+                GL11.glDrawElements(GL11.GL_TRIANGLES, texturedModel.getRawModel().getVortexCount(), GL11.GL_UNSIGNED_INT, 0);
+            }
+            unbindTexturedModel();
+        }
+    }
+
+    private void prepareTexturedModel(TexturedModel texturedModel) {
         RawModel rawModel = texturedModel.getRawModel();
         GL30.glBindVertexArray(rawModel.getVaoID());
         GL20.glEnableVertexAttribArray(0);
         GL20.glEnableVertexAttribArray(1);
         GL20.glEnableVertexAttribArray(2);
-        Matrix4f transformationMatrix = Maths.createTransformationMatrix(
-                new EntityTransformation(entity.getPosition(), entity.getRotation(), entity.getScale())
-        );
-        shader.loadTransformationMatrix(transformationMatrix);
 
         ModelTexture modelTexture = texturedModel.getModelTexture();
         shader.loadShineVariables(modelTexture.getShineDamper(), modelTexture.getReflectivity());
 
         GL13.glActiveTexture(GL13.GL_TEXTURE0);
         GL11.glBindTexture(GL11.GL_TEXTURE_2D, modelTexture.getTextureID());
-        GL11.glDrawElements(GL11.GL_TRIANGLES, rawModel.getVortexCount(), GL11.GL_UNSIGNED_INT, 0);
+    }
+
+    private void unbindTexturedModel() {
         GL20.glDisableVertexAttribArray(0);
         GL20.glDisableVertexAttribArray(1);
         GL20.glDisableVertexAttribArray(2);
         GL30.glBindVertexArray(0);
+    }
+
+    private void prepareInstance(Entity entity) {
+        Matrix4f transformationMatrix = Maths.createTransformationMatrix(
+                new EntityTransformation(entity.getLocation().getPosition(), entity.getLocation().getRotation(), entity.getScale())
+        );
+        shader.loadTransformationMatrix(transformationMatrix);
     }
 
     private void createProjectionMatrix() {
@@ -66,15 +90,6 @@ public class Renderer {
         projectionMatrix.m23 = -1;
         projectionMatrix.m32 = -((2 * NEAR_PLANE * FAR_PLANE) / frustrum_length);
         projectionMatrix.m33 = 0;
-    }
-
-    @Deprecated
-    public void render(RawModel model) {
-        GL30.glBindVertexArray(model.getVaoID());
-        GL20.glEnableVertexAttribArray(0);
-        GL11.glDrawElements(GL11.GL_TRIANGLES, model.getVortexCount(), GL11.GL_UNSIGNED_INT, 0);
-        GL20.glDisableVertexAttribArray(0);
-        GL30.glBindVertexArray(0);
     }
 
 }

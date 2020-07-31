@@ -3,10 +3,13 @@ package me.themgrf.avalon;
 import me.themgrf.avalon.entities.Camera;
 import me.themgrf.avalon.entities.Entity;
 import me.themgrf.avalon.entities.Light;
+import me.themgrf.avalon.entities.Player;
 import me.themgrf.avalon.renderer.DisplayManager;
+import me.themgrf.avalon.renderer.RenderManager;
 import me.themgrf.avalon.renderer.models.*;
 import me.themgrf.avalon.renderer.shaders.StaticShader;
 import me.themgrf.avalon.renderer.textures.ModelTexture;
+import me.themgrf.avalon.utils.Location;
 import me.themgrf.avalon.utils.Rotation;
 import org.lwjgl.opengl.Display;
 import org.lwjgl.util.vector.Vector3f;
@@ -22,11 +25,6 @@ public class Start {
         DisplayManager.createDisplay();
 
         Loader loader = new Loader();
-        StaticShader shader = new StaticShader();
-        Renderer renderer = new Renderer(shader);
-
-        //RawModel rawModel = loader.loadToVAO(vertices, textureCoords, indices); // original cube
-        //RawModel cube = ModelLoader.cube(loader);
         RawModel rawModel = ModelLoader.loadModel("test/stall", loader);
 
         ModelTexture texture = null;
@@ -41,28 +39,25 @@ public class Start {
 
         TexturedModel texturedModel = new TexturedModel(rawModel, texture);
 
-        Camera camera = new Camera(); // Player
+        Player player = new Player(new Camera(), "Geoff");
 
-        Entity entity = new Entity(texturedModel, new Vector3f(0, -2, -25), new Rotation(0, 180, 0), 1);
+        Entity entity = new Entity(texturedModel, new Location(0, -2, -25), 1);
         Light light = new Light(new Vector3f(0, 5, 0), new Vector3f(1, 1, 1));
 
+        RenderManager renderManager = new RenderManager();
         while (!Display.isCloseRequested()) {
-            //entity.increasePosition(0, 0, -0.002f);
-            entity.increaseRotation(new Rotation(0, 0.2f, 0));
-            camera.move();
-            light.setPosition(camera.getPosition());
+            Location loc = entity.getLocation();
+            loc.setRotation(new Rotation(0, loc.getRotation().getY() + 0.2f, 0));
 
-            renderer.prepare();
-            shader.start();
-            shader.loadLight(light);
-            shader.loadViewMatrix(camera);
-            renderer.render(entity, shader);
-            shader.stop();
+            player.move();
+
+            renderManager.processEntity(entity);
+            renderManager.render(light, player.getCamera());
 
             DisplayManager.updateDisplay();
         }
 
-        shader.cleanUp();
+        renderManager.cleanUp();
         loader.cleanUp();
         DisplayManager.closeDisplay();
     }

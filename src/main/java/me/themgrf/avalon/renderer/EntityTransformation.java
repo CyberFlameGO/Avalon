@@ -11,9 +11,9 @@ public class EntityTransformation {
 
     private Vector3f translation;
     private Rotation rotation;
-    private int scale;
+    private float scale;
 
-    public EntityTransformation(Vector3f translation, Rotation rotation, int scale) {
+    public EntityTransformation(Vector3f translation, Rotation rotation, float scale) {
         this.translation = translation;
         this.rotation = rotation;
         this.scale = scale;
@@ -35,11 +35,11 @@ public class EntityTransformation {
         this.rotation = rotation;
     }
 
-    public int getScale() {
+    public float getScale() {
         return scale;
     }
 
-    public void setScale(int scale) {
+    public void setScale(float scale) {
         this.scale = scale;
     }
 }
