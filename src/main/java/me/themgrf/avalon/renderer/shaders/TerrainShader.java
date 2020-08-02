@@ -1,12 +1,12 @@
 package me.themgrf.avalon.renderer.shaders;
 
-public class StaticShader extends ShaderProgram {
+public class TerrainShader extends ShaderProgram {
 
     private static final String PATH = "src/main/java/me/themgrf/avalon/renderer/shaders/";
-    private static final String VERTEX_FILE = PATH + "vertexShader.txt";
-    private static final String FRAGMENT_FILE = PATH + "fragmentShader.txt";
+    private static final String VERTEX_FILE = PATH + "terrainVertexShader.txt";
+    private static final String FRAGMENT_FILE = PATH + "terrainFragmentShader.txt";
 
-    public StaticShader() {
+    public TerrainShader() {
         super(VERTEX_FILE, FRAGMENT_FILE);
     }
 
@@ -16,4 +16,5 @@ public class StaticShader extends ShaderProgram {
         super.bindAttribute(1, "textureCoordinates");
         super.bindAttribute(2, "normal");
     }
+
 }

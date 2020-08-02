@@ -50,6 +50,10 @@ public class Entity {
         this.location = location;
     }
 
+    public void setRotation(Rotation rotation) {
+        location.setRotation(rotation);
+    }
+
     public float getScale() {
         return scale;
     }

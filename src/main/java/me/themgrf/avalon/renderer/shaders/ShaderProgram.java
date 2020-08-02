@@ -1,5 +1,9 @@
 package me.themgrf.avalon.renderer.shaders;
 
+import me.themgrf.avalon.entities.Camera;
+import me.themgrf.avalon.entities.Light;
+import me.themgrf.avalon.utils.Maths;
+import me.themgrf.avalon.utils.colour.RGB;
 import org.lwjgl.BufferUtils;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL20;
@@ -18,6 +22,15 @@ public abstract class ShaderProgram {
     private final int vertexShaderID;
     private final int fragmentShaderID;
 
+    private int locationTransformationMatrix;
+    private int locationProjectionMatrix;
+    private int locationViewMatrix;
+    private int locationLightPosition;
+    private int locationLightColour;
+    private int locationShineDamper;
+    private int locationReflectivity;
+    private int locationSkyColour;
+
     private static final FloatBuffer matrixBuffer = BufferUtils.createFloatBuffer(16);
 
     public ShaderProgram(String vertexFile, String fragmentFile) {
@@ -33,7 +46,43 @@ public abstract class ShaderProgram {
         getAlluniformLocations();
     }
 
-    protected abstract void getAlluniformLocations();
+    protected void getAlluniformLocations() {
+        locationTransformationMatrix = getUniformLocation("transformationMatrix");
+        locationProjectionMatrix = getUniformLocation("projectionMatrix");
+        locationViewMatrix = getUniformLocation("viewMatrix");
+        locationLightPosition = getUniformLocation("lightPosition");
+        locationLightColour = getUniformLocation("lightColour");
+        locationShineDamper = getUniformLocation("shineDamper");
+        locationReflectivity = getUniformLocation("reflectivity");
+        locationSkyColour = getUniformLocation("skyColour");
+    }
+
+    public void loadSkyColour(RGB rgb) {
+        loadVector(locationSkyColour, new Vector3f(rgb.getRed(), rgb.getGreen(), rgb.getBlue()));
+    }
+
+    public void loadShineVariables(float damper, float reflectivity) {
+        loadFloat(locationShineDamper, damper);
+        loadFloat(locationReflectivity, reflectivity);
+    }
+
+    public void loadTransformationMatrix(Matrix4f matrix) {
+        loadMatrix(locationTransformationMatrix, matrix);
+    }
+
+    public void loadProjectionMatrix(Matrix4f matrix) {
+        loadMatrix(locationProjectionMatrix, matrix);
+    }
+
+    public void loadLight(Light light) {
+        loadVector(locationLightPosition, light.getPosition());
+        loadVector(locationLightColour, light.getColour());
+    }
+
+    public void loadViewMatrix(Camera camera) {
+        Matrix4f viewMatrix = Maths.createViewMatrix(camera);
+        loadMatrix(locationViewMatrix, viewMatrix);
+    }
 
     protected int getUniformLocation(String uniformName) {
         return GL20.glGetUniformLocation(programID, uniformName);

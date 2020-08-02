@@ -34,31 +34,36 @@ public class Loader {
         return new RawModel(vaoID, indices.length);
     }
 
-    public int loadTexture(String fileName) throws IOException {
-        // Load the png file
-        PNGDecoder decoder = new PNGDecoder(Avalon.getInstance().getTexturePack().getResourceStream(new ResourceLocation("textures/" + fileName + ".png")));
+    public int loadTexture(String fileName) {
+        try {
+            // Load the png file
+            PNGDecoder decoder = new PNGDecoder(Avalon.getInstance().getTexturePack().getResourceStream(new ResourceLocation("textures/" + fileName + ".png")));
 
-        // Create a byte buffer for RGBA values
-        ByteBuffer buffer = ByteBuffer.allocateDirect(4 * decoder.getWidth() * decoder.getHeight());
-        decoder.decode(buffer, decoder.getWidth() * 4, PNGDecoder.Format.RGBA);
+            // Create a byte buffer for RGBA values
+            ByteBuffer buffer = ByteBuffer.allocateDirect(4 * decoder.getWidth() * decoder.getHeight());
+            decoder.decode(buffer, decoder.getWidth() * 4, PNGDecoder.Format.RGBA);
 
-        buffer.flip(); // Flip the buffer to read
+            buffer.flip(); // Flip the buffer to read
 
-        int id = GL11.glGenTextures(); // Create a texture
-        GL11.glBindTexture(GL11.GL_TEXTURE_2D, id); // Bind the texture
-        GL11.glPixelStorei(GL11.GL_UNPACK_ALIGNMENT, 1); // Tell OpenGL how to unpack bytes
+            int id = GL11.glGenTextures(); // Create a texture
+            GL11.glBindTexture(GL11.GL_TEXTURE_2D, id); // Bind the texture
+            GL11.glPixelStorei(GL11.GL_UNPACK_ALIGNMENT, 1); // Tell OpenGL how to unpack bytes
 
-        // Set the texture parameters, can be GL_LINEAR or GL_NEAREST
-        GL11.glTexParameterf(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_MIN_FILTER, GL11.GL_LINEAR);
-        GL11.glTexParameterf(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_MAG_FILTER, GL11.GL_LINEAR);
+            // Set the texture parameters, can be GL_LINEAR or GL_NEAREST
+            GL11.glTexParameterf(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_MIN_FILTER, GL11.GL_LINEAR);
+            GL11.glTexParameterf(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_MAG_FILTER, GL11.GL_LINEAR);
 
-        // Upload texture
-        GL11.glTexImage2D(GL11.GL_TEXTURE_2D, 0, GL11.GL_RGBA, decoder.getWidth(), decoder.getHeight(), 0, GL11.GL_RGBA, GL11.GL_UNSIGNED_BYTE, buffer);
+            // Upload texture
+            GL11.glTexImage2D(GL11.GL_TEXTURE_2D, 0, GL11.GL_RGBA, decoder.getWidth(), decoder.getHeight(), 0, GL11.GL_RGBA, GL11.GL_UNSIGNED_BYTE, buffer);
 
-        // Generate Mip Map
-        GL30.glGenerateMipmap(GL11.GL_TEXTURE_2D);
+            // Generate Mip Map
+            GL30.glGenerateMipmap(GL11.GL_TEXTURE_2D);
 
-        return id;
+            return id;
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return -1;
     }
 
     public void cleanUp() {

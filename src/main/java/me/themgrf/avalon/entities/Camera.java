@@ -7,7 +7,7 @@ import org.lwjgl.util.vector.Vector3f;
 
 public class Camera {
 
-    private final Vector3f position = new Vector3f(0, 0, 0);
+    private final Vector3f position = new Vector3f(0, 3, 0);
     private final Rotation rotation = new Rotation(0, 0, 0);
 
     public void move() {
