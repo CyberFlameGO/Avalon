@@ -16,11 +16,14 @@ import me.themgrf.avalon.utils.Rotation;
 import org.lwjgl.opengl.Display;
 import org.lwjgl.util.vector.Vector3f;
 
+import java.io.File;
 import java.io.IOException;
 
 public class Start {
 
     public static void main(String[] args) {
+        System.setProperty("org.lwjgl.librarypath", new File("C:/Users/Thomas/Documents/IntelliJ Coding/Avalon/libs/").getAbsolutePath());
+
         Avalon avalon = new Avalon();
         avalon.init();
 
