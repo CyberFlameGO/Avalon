@@ -20,7 +20,7 @@ public class AvalonDisplay {
         }
 
         try {
-            setFullscreen(fullscreen, width, height);
+            setFullscreen(fullscreen);
 
             Display.setTitle(title);
 
@@ -43,11 +43,12 @@ public class AvalonDisplay {
         GL11.glViewport(0, 0, width, height);
     }
 
-    public static void setFullscreen(boolean fullscreen, int width, int height) {
+    public static void setFullscreen(boolean fullscreen) {
         try {
-            Display.setDisplayMode(new DisplayMode(width, height));
+            Display.setDisplayMode(new DisplayMode(DisplayManager.DEFAULT_RES.getWidth(), DisplayManager.DEFAULT_RES.getHeight()));
             if (fullscreen) {
                 Display.setDisplayModeAndFullscreen(Display.getDesktopDisplayMode());
+                GL11.glViewport(0, 0, DisplayManager.FULLSCREEN_RES.getWidth(), DisplayManager.FULLSCREEN_RES.getHeight());
             } else {
                 Display.setFullscreen(false);
                 Display.setResizable(true);

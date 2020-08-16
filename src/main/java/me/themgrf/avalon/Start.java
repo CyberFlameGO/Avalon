@@ -24,7 +24,7 @@ public class Start {
         Avalon avalon = new Avalon();
         avalon.init();
 
-        DisplayManager.createDisplay();
+        DisplayManager.createDisplay(DisplayManager.DEFAULT_RES);
 
         Loader loader = new Loader();
         RawModel rawModel = ModelLoader.loadModel("test/stall", loader);
