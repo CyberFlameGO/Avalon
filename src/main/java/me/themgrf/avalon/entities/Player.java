@@ -12,6 +12,8 @@ public class Player extends Entity {
         super(new RawModel(0, 0), new Location(camera.getPosition(), camera.getRotation()), 1);
         this.camera = camera;
         this.name = name;
+
+        this.camera.getRotation().setX(10);
     }
 
     public void move() {
