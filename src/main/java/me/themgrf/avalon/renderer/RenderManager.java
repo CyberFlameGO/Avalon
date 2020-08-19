@@ -8,7 +8,8 @@ import me.themgrf.avalon.renderer.renderers.EntityRenderer;
 import me.themgrf.avalon.renderer.renderers.TerrainRenderer;
 import me.themgrf.avalon.renderer.shaders.StaticShader;
 import me.themgrf.avalon.renderer.shaders.TerrainShader;
-import me.themgrf.avalon.terrain.Terrain;
+import me.themgrf.avalon.terrain.LowPolyTerrain;
+import me.themgrf.avalon.terrain.TexturedTerrain;
 import me.themgrf.avalon.utils.colour.RGB;
 import org.lwjgl.opengl.Display;
 import org.lwjgl.opengl.GL11;
@@ -20,9 +21,9 @@ import java.util.List;
 
 public class RenderManager {
 
-    private static final float FOV = 70;
-    private static final float NEAR_PLANE = 0.1f;
-    private static final float FAR_PLANE = 1000;
+    public static final float FOV = 70;
+    public static final float NEAR_PLANE = 0.1f;
+    public static final float FAR_PLANE = 1000;
 
     private static final RGB SKY_COLOUR = new RGB(127, 184, 184).makeGLCompatible();
 
@@ -33,7 +34,7 @@ public class RenderManager {
     private final TerrainShader terrainShader = new TerrainShader();
 
     private final HashMap<TexturedModel, List<Entity>> entities = new HashMap<>();
-    private final List<Terrain> terrains = new ArrayList<>();
+    private final List<TexturedTerrain> terrains = new ArrayList<>();
 
     private Matrix4f projectionMatrix;
 
@@ -69,6 +70,11 @@ public class RenderManager {
         terrains.clear();
     }
 
+    public void render(LowPolyTerrain terrain, Camera camera, Light light) {
+        prepare();
+        terrain.render(camera, light);
+    }
+
     public void processEntity(Entity entity) {
         TexturedModel texturedModel = entity.getTexturedModel();
         List<Entity> batch = entities.get(texturedModel);
@@ -81,7 +87,7 @@ public class RenderManager {
         }
     }
 
-    public void processTerrain(Terrain terrain) {
+    public void processTerrain(TexturedTerrain terrain) {
         terrains.add(terrain);
     }
 

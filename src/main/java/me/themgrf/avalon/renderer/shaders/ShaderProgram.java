@@ -76,7 +76,7 @@ public abstract class ShaderProgram {
 
     public void loadLight(Light light) {
         loadVector(locationLightPosition, light.getPosition());
-        loadVector(locationLightColour, light.getColour());
+        loadVector(locationLightColour, light.getColour().asVector());
     }
 
     public void loadViewMatrix(Camera camera) {
@@ -129,7 +129,33 @@ public abstract class ShaderProgram {
         GL20.glUniformMatrix4(location, false, matrixBuffer);
     }
 
-    private static int loadShader(String file, int type) {
+    private int loadShader(String file, int type) {
+        StringBuilder shaderSource = new StringBuilder();
+        try {
+            BufferedReader reader = new BufferedReader(new FileReader(file));
+            String line;
+            while ((line = reader.readLine()) != null) {
+                shaderSource.append(line).append("//\n");
+            }
+            reader.close();
+        } catch (Exception e) {
+            System.err.println("Could not read file.");
+            e.printStackTrace();
+            System.exit(-1);
+        }
+        int shaderID = GL20.glCreateShader(type);
+        GL20.glShaderSource(shaderID, shaderSource);
+        GL20.glCompileShader(shaderID);
+        if (GL20.glGetShaderi(shaderID, GL20.GL_COMPILE_STATUS) == GL11.GL_FALSE) {
+            System.out.println(GL20.glGetShaderInfoLog(shaderID, 500));
+            System.err.println("Could not compile shader "+ file);
+            System.exit(-1);
+        }
+        return shaderID;
+    }
+
+    @Deprecated
+    private static int oldLoadShader(String file, int type) {
         StringBuilder shaderSource = new StringBuilder();
         try {
             BufferedReader reader = new BufferedReader(new FileReader(file));

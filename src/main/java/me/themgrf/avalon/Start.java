@@ -7,17 +7,20 @@ import me.themgrf.avalon.entities.Player;
 import me.themgrf.avalon.renderer.DisplayManager;
 import me.themgrf.avalon.renderer.RenderManager;
 import me.themgrf.avalon.renderer.models.*;
-import me.themgrf.avalon.renderer.renderers.EntityRenderer;
-import me.themgrf.avalon.renderer.shaders.StaticShader;
 import me.themgrf.avalon.renderer.textures.ModelTexture;
-import me.themgrf.avalon.terrain.Terrain;
+import me.themgrf.avalon.terrain.LowPolyTerrain;
+import me.themgrf.avalon.terrain.TexturedTerrain;
+import me.themgrf.avalon.terrain.generation.ColourGenerator;
+import me.themgrf.avalon.terrain.generation.LowPolyTerrainGenerator;
+import me.themgrf.avalon.terrain.generation.PerlinNoiseGenerator;
 import me.themgrf.avalon.utils.Location;
 import me.themgrf.avalon.utils.Rotation;
+import me.themgrf.avalon.utils.colour.RGB;
 import org.lwjgl.opengl.Display;
+import org.lwjgl.util.vector.Vector2f;
 import org.lwjgl.util.vector.Vector3f;
 
 import java.io.File;
-import java.io.IOException;
 
 public class Start {
 
@@ -39,30 +42,39 @@ public class Start {
 
         TexturedModel texturedModel = new TexturedModel(rawModel, texture);
 
-        Player player = new Player(new Camera(), "Geoff");
+        Player player = new Player(new Camera(), "Player");
 
         Entity entity = new Entity(texturedModel, new Location(0, 0, -50), 1);
         entity.setRotation(new Rotation(0, 180, 0));
-        Light light = new Light(new Vector3f(0, 1000, 0), new Vector3f(1, 1, 1));
+        Light light = new Light(new Vector3f(50, 100, 50), new Vector3f(1, 1, 1), new RGB(0, 0, 0), new Vector2f(0, 0));
 
-        Terrain terrain = new Terrain(-1, -1, loader, new ModelTexture(loader.loadTexture("test/grass")));
-        Terrain terrain2 = new Terrain(0, -1, loader, new ModelTexture(loader.loadTexture("test/grass")));
+        //TexturedTerrain terrain = new TexturedTerrain(-0.5f, -0.5f, loader, new ModelTexture(loader.loadTexture("test/grass")), "heightmap");
 
-        RenderManager renderManager = new RenderManager();
+        PerlinNoiseGenerator noise = new PerlinNoiseGenerator(3, 10, 0.35f);
+        ColourGenerator colourGen = new ColourGenerator(
+                new RGB[] { new RGB(201, 178, 99),
+                        new RGB(135, 184, 82), new RGB(80, 171, 93), new RGB(120, 120, 120),
+                        new RGB(200, 200, 210) },
+                0.45f
+        );
+        LowPolyTerrain terrain = new LowPolyTerrainGenerator(noise, colourGen).generateTerrain(1600);
+
+        RenderManager renderManager = avalon.getRenderManager();
         while (!Display.isCloseRequested()) {
             //Location loc = entity.getLocation();
             //loc.setRotation(new Rotation(0, loc.getRotation().getY() + 0.2f, 0));
 
             player.move();
 
-            renderManager.processTerrain(terrain);
-            renderManager.processTerrain(terrain2);
+            //renderManager.processTerrain(terrain);
             renderManager.processEntity(entity);
-            renderManager.render(light, player.getCamera());
+            //renderManager.render(light, player.getCamera());
+            renderManager.render(terrain, player.getCamera(), light);
 
             DisplayManager.updateDisplay();
         }
 
+        terrain.delete();
         renderManager.cleanUp();
         loader.cleanUp();
         DisplayManager.closeDisplay();

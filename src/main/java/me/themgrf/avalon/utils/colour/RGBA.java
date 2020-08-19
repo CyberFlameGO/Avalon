@@ -16,4 +16,13 @@ public class RGBA extends RGB {
     public RGBA makeGLCompatible() {
         return new RGBA(getRed()/255, getGreen()/255, getBlue()/255, alpha);
     }
+
+    @Override
+    public byte[] getAsBytes(){
+        int r = (int) (getRed() * 255);
+        int g = (int) (getGreen() * 255);
+        int b = (int) (getBlue() * 255);
+        int alpha = (int) (getAlpha() * 255);
+        return new byte[]{(byte)r, (byte) g, (byte) b, (byte) alpha};
+    }
 }
