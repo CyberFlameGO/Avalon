@@ -10,6 +10,7 @@ import me.themgrf.avalon.renderer.shaders.StaticShader;
 import me.themgrf.avalon.renderer.shaders.TerrainShader;
 import me.themgrf.avalon.terrain.Terrain;
 import me.themgrf.avalon.utils.colour.RGB;
+import org.lwjgl.input.Keyboard;
 import org.lwjgl.opengl.Display;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.util.vector.Matrix4f;
@@ -89,6 +90,12 @@ public class RenderManager {
         GL11.glEnable(GL11.GL_DEPTH_TEST);
         GL11.glClear(GL11.GL_COLOR_BUFFER_BIT|GL11.GL_DEPTH_BUFFER_BIT);
         GL11.glClearColor(SKY_COLOUR.getRed(), SKY_COLOUR.getGreen(), SKY_COLOUR.getBlue(), 1);
+
+        if (Keyboard.isKeyDown(Keyboard.KEY_F10)) {
+            GL11.glPolygonMode(GL11.GL_FRONT_AND_BACK, GL11.GL_LINE);
+        } else {
+            GL11.glPolygonMode(GL11.GL_FRONT_AND_BACK, GL11.GL_FILL);
+        }
     }
 
     private void createProjectionMatrix() {
