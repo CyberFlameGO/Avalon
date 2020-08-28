@@ -8,8 +8,6 @@ import me.themgrf.avalon.renderer.DisplayManager;
 import me.themgrf.avalon.renderer.RenderManager;
 import me.themgrf.avalon.renderer.ResourceLocation;
 import me.themgrf.avalon.renderer.models.*;
-import me.themgrf.avalon.renderer.renderers.EntityRenderer;
-import me.themgrf.avalon.renderer.shaders.StaticShader;
 import me.themgrf.avalon.renderer.textures.ModelTexture;
 import me.themgrf.avalon.terrain.Terrain;
 import me.themgrf.avalon.utils.Location;
@@ -18,7 +16,6 @@ import org.lwjgl.opengl.Display;
 import org.lwjgl.util.vector.Vector3f;
 
 import java.io.File;
-import java.io.IOException;
 
 public class Start {
 

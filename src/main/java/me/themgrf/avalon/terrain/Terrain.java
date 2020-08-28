@@ -9,14 +9,11 @@ import org.lwjgl.util.vector.Vector3f;
 
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
-import java.io.File;
 import java.io.IOException;
-import java.nio.Buffer;
 
 public class Terrain {
 
     private static final float SIZE = 800;
-    //private static final int VERTEX_COUNT = 64;
     private static final float MAX_HEIGHT = 40;
     private static final float MIN_HEIGHT = -40;
     private static final float MAX_PIXEL_COLOUR = 256 * 256* 256;
