@@ -32,7 +32,7 @@ void main(void) {
     toLightVector = lightPosition - worldPos.xyz;
     toCameraVector = (inverse(viewMatrix) * vec4(0,0,0,1)).xyz - worldPos.xyz;
 
-    float distance = length(positionRelativeToCamera.xyz);
+    float distance = length(positionRelativeToCamera.xyz) / 1.5;
     visibility = exp(-pow((distance*density), gradient));
     visibility = clamp(visibility, 0, 1);
 }
