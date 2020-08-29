@@ -1,10 +1,8 @@
 package me.themgrf.avalon.renderer.models;
 
-import com.jogamp.opengl.GL;
 import de.matthiasmann.twl.utils.PNGDecoder;
 import me.themgrf.avalon.Avalon;
 import me.themgrf.avalon.renderer.ResourceLocation;
-import me.themgrf.avalon.renderer.textures.Texture;
 import org.lwjgl.BufferUtils;
 import org.lwjgl.opengl.*;
 
@@ -29,6 +27,13 @@ public class Loader {
         storeDataInAttributeList(2, 3, normals);
         unbindVAO();
         return new RawModel(vaoID, indices.length);
+    }
+
+    public RawModel loadToVAO(float[] positions) {
+        int vaoID = createVAO();
+        storeDataInAttributeList(0, 2, positions);
+        unbindVAO();
+        return new RawModel(vaoID, positions.length / 2);
     }
 
     public int loadTexture(String fileName) {

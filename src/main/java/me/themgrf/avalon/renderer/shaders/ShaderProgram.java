@@ -43,10 +43,10 @@ public abstract class ShaderProgram {
         bindAttributes();
         GL20.glLinkProgram(programID);
         GL20.glValidateProgram(programID);
-        getAlluniformLocations();
+        getAllUniformLocations();
     }
 
-    protected void getAlluniformLocations() {
+    public void getAllUniformLocations() {
         locationTransformationMatrix = getUniformLocation("transformationMatrix");
         locationProjectionMatrix = getUniformLocation("projectionMatrix");
         locationViewMatrix = getUniformLocation("viewMatrix");

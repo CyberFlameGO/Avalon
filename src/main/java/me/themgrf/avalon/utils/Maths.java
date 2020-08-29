@@ -3,12 +3,30 @@ package me.themgrf.avalon.utils;
 import me.themgrf.avalon.entities.Camera;
 import me.themgrf.avalon.renderer.EntityTransformation;
 import org.lwjgl.util.vector.Matrix4f;
+import org.lwjgl.util.vector.Vector2f;
 import org.lwjgl.util.vector.Vector3f;
 
 public class Maths {
 
     /**
+     * Return a 4x4 Matrix based on a 2d tanslation
+     *
+     * @param translation
+     * @param scale
+     * @return
+     */
+    public static Matrix4f createTransformationMatrix(Vector2f translation, Vector2f scale) {
+        Matrix4f matrix = new Matrix4f();
+        matrix.setIdentity();
+        Matrix4f.translate(translation, matrix, matrix);
+        Matrix4f.scale(new Vector3f(scale.x, scale.y, 1f), matrix, matrix);
+
+        return matrix;
+    }
+
+    /**
      * Return a 4x4 Matrix based on an entity transformation
+     *
      * @param transformation The entity rotation to utilise
      * @return A 4x4 Matrix based on an entity transformation
      */

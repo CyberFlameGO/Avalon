@@ -1,6 +1,7 @@
 package me.themgrf.avalon;
 
 import me.themgrf.avalon.renderer.TexturePack;
+import me.themgrf.avalon.renderer.models.Loader;
 
 import java.io.File;
 import java.util.HashMap;
@@ -10,12 +11,15 @@ public class Avalon {
 
     private static Avalon instance;
 
-    private Random random;
+    private final Random random;
+    private final Loader loader;
     private TexturePack texturePack;
 
-    public void init() {
+    public Avalon() {
         instance = this;
-        random = new Random();
+
+        this.random = new Random();
+        this.loader = new Loader();
 
         setTexturePack(new TexturePack(new HashMap<String, File>(){{
             put("", null);
@@ -28,6 +32,10 @@ public class Avalon {
 
     public Random getRandom() {
         return random;
+    }
+
+    public Loader getLoader() {
+        return loader;
     }
 
     public TexturePack getTexturePack() {

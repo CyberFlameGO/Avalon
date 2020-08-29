@@ -7,15 +7,20 @@ import me.themgrf.avalon.entities.Player;
 import me.themgrf.avalon.renderer.DisplayManager;
 import me.themgrf.avalon.renderer.RenderManager;
 import me.themgrf.avalon.renderer.ResourceLocation;
+import me.themgrf.avalon.renderer.guis.GUIRenderer;
+import me.themgrf.avalon.renderer.guis.GUITexture;
 import me.themgrf.avalon.renderer.models.*;
 import me.themgrf.avalon.renderer.textures.ModelTexture;
 import me.themgrf.avalon.terrain.Terrain;
 import me.themgrf.avalon.utils.Location;
 import me.themgrf.avalon.utils.Rotation;
 import org.lwjgl.opengl.Display;
+import org.lwjgl.util.vector.Vector2f;
 import org.lwjgl.util.vector.Vector3f;
 
 import java.io.File;
+import java.util.ArrayList;
+import java.util.List;
 
 public class Start {
 
@@ -23,11 +28,10 @@ public class Start {
         System.setProperty("org.lwjgl.librarypath", new File("C:/Users/Thomas/Documents/IntelliJ Coding/Avalon/libs/").getAbsolutePath());
 
         Avalon avalon = new Avalon();
-        avalon.init();
 
         DisplayManager.createDisplay(DisplayManager.DEFAULT_RES);
 
-        Loader loader = new Loader();
+        Loader loader = avalon.getLoader();
         RawModel rawModel = ModelLoader.loadModel("test/stall", loader);
 
         ModelTexture texture = new ModelTexture(loader.loadTexture("test/stall"));
@@ -38,6 +42,8 @@ public class Start {
         TexturedModel texturedModel = new TexturedModel(rawModel, texture);
 
         Player player = new Player(new Camera(), "Geoff");
+
+        GUIRenderer guiRenderer = new GUIRenderer(loader);
 
         Entity entity = new Entity(texturedModel, new Location(0, 0, -50), 1);
         entity.setRotation(new Rotation(0, 180, 0));
@@ -59,9 +65,12 @@ public class Start {
             renderManager.processEntity(entity);
             renderManager.render(light, player.getCamera());
 
+            guiRenderer.render();
+
             DisplayManager.updateDisplay();
         }
 
+        guiRenderer.cleanUp();
         renderManager.cleanUp();
         loader.cleanUp();
         DisplayManager.closeDisplay();
