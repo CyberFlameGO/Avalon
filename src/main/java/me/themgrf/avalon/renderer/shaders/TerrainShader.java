@@ -3,8 +3,8 @@ package me.themgrf.avalon.renderer.shaders;
 public class TerrainShader extends ShaderProgram {
 
     private static final String PATH = "src/main/java/me/themgrf/avalon/renderer/shaders/";
-    private static final String VERTEX_FILE = PATH + "terrainVertexShader.txt";
-    private static final String FRAGMENT_FILE = PATH + "terrainFragmentShader.txt";
+    private static final String VERTEX_FILE = PATH + "terrainVertexShader.glsl";
+    private static final String FRAGMENT_FILE = PATH + "terrainFragmentShader.glsl";
 
     public TerrainShader() {
         super(VERTEX_FILE, FRAGMENT_FILE);

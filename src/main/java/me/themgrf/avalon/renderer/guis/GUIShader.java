@@ -6,8 +6,8 @@ import org.lwjgl.util.vector.Matrix4f;
 public class GUIShader extends ShaderProgram {
 
     private static final String PATH = "src/main/java/me/themgrf/avalon/renderer/shaders/guis/";
-    private static final String VERTEX_FILE = PATH + "guiVertexShader.txt";
-    private static final String FRAGMENT_FILE = PATH + "guiFragmentShader.txt";
+    private static final String VERTEX_FILE = PATH + "guiVertexShader.glsl";
+    private static final String FRAGMENT_FILE = PATH + "guiFragmentShader.glsl";
 
     private int location_transformationMatrix;
 

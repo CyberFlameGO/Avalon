@@ -3,8 +3,8 @@ package me.themgrf.avalon.renderer.shaders;
 public class StaticShader extends ShaderProgram {
 
     private static final String PATH = "src/main/java/me/themgrf/avalon/renderer/shaders/";
-    private static final String VERTEX_FILE = PATH + "vertexShader.txt";
-    private static final String FRAGMENT_FILE = PATH + "fragmentShader.txt";
+    private static final String VERTEX_FILE = PATH + "vertexShader.glsl";
+    private static final String FRAGMENT_FILE = PATH + "fragmentShader.glsl";
 
     public StaticShader() {
         super(VERTEX_FILE, FRAGMENT_FILE);
