@@ -89,9 +89,9 @@ public class Start {
                         //light.setPosition(new Vector3f(500, pos.y + 1, 0));
                     }
                     if (pos.x > 0) {
-                        light.setPosition(new Vector3f(pos.x + 0.1f, pos.y - 0.1f, 0));
+                        light.setPosition(new Vector3f(pos.x + 1, pos.y - 1, 0));
                     } else {
-                        light.setPosition(new Vector3f(pos.x + 0.1f, pos.y + 0.1f, 0));
+                        light.setPosition(new Vector3f(pos.x + 1, pos.y + 1, 0));
                     }
                 }
             }
