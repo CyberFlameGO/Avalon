@@ -2,25 +2,26 @@ package me.themgrf.avalon;
 
 import me.themgrf.avalon.entities.Camera;
 import me.themgrf.avalon.entities.Entity;
-import me.themgrf.avalon.entities.Light;
 import me.themgrf.avalon.entities.Player;
+import me.themgrf.avalon.entities.lights.Light;
+import me.themgrf.avalon.entities.lights.PointLight;
 import me.themgrf.avalon.renderer.DisplayManager;
 import me.themgrf.avalon.renderer.RenderManager;
 import me.themgrf.avalon.renderer.ResourceLocation;
 import me.themgrf.avalon.renderer.guis.GUIRenderer;
-import me.themgrf.avalon.renderer.guis.GUITexture;
-import me.themgrf.avalon.renderer.models.*;
+import me.themgrf.avalon.renderer.models.Loader;
+import me.themgrf.avalon.renderer.models.ModelLoader;
+import me.themgrf.avalon.renderer.models.RawModel;
+import me.themgrf.avalon.renderer.models.TexturedModel;
 import me.themgrf.avalon.renderer.textures.ModelTexture;
 import me.themgrf.avalon.terrain.Terrain;
 import me.themgrf.avalon.utils.Location;
 import me.themgrf.avalon.utils.Rotation;
 import me.themgrf.avalon.utils.colour.RGB;
 import org.lwjgl.opengl.Display;
-import org.lwjgl.util.vector.Vector2f;
 import org.lwjgl.util.vector.Vector3f;
 
 import java.io.File;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -56,7 +57,7 @@ public class Start {
 
         List<Light> lights = Arrays.asList(
                 new Light(new Vector3f(0, 1000, 0), new RGB(255, 255, 255)),
-                new Light(new Vector3f(0, 10, 10), new RGB(255, 153, 102))
+                new PointLight(new Vector3f(0, 10, -50), new RGB(255, 153, 102), new Vector3f(1, 0.01f, 0.002f))
         );
 
         RenderManager renderManager = new RenderManager();

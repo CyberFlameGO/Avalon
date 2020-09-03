@@ -1,7 +1,8 @@
 package me.themgrf.avalon.renderer.shaders;
 
 import me.themgrf.avalon.entities.Camera;
-import me.themgrf.avalon.entities.Light;
+import me.themgrf.avalon.entities.lights.Light;
+import me.themgrf.avalon.entities.lights.PointLight;
 import me.themgrf.avalon.utils.Maths;
 import me.themgrf.avalon.utils.colour.RGB;
 import org.lwjgl.BufferUtils;
@@ -30,6 +31,7 @@ public abstract class ShaderProgram {
     private int locationViewMatrix;
     private int[] locationLightPosition;
     private int[] locationLightColour;
+    private int[] locationLightAttenuation;
     private int locationShineDamper;
     private int locationReflectivity;
     private int locationSkyColour;
@@ -59,9 +61,11 @@ public abstract class ShaderProgram {
 
         locationLightPosition = new int[MAX_LIGHTS];
         locationLightColour = new int[MAX_LIGHTS];
+        locationLightAttenuation = new int[MAX_LIGHTS];
         for (int i = 0; i < MAX_LIGHTS; i++) {
             locationLightPosition[i] = getUniformLocation("lightPosition[" + i + "]");
             locationLightColour[i] = getUniformLocation("lightColour[" + i + "]");
+            locationLightAttenuation[i] = getUniformLocation("lightAttenuation[" + i + "]");
         }
     }
 
@@ -85,11 +89,18 @@ public abstract class ShaderProgram {
     public void loadLights(List<Light> lights) {
         for (int i = 0; i < MAX_LIGHTS; i++) {
             if (i < lights.size()) {
-                loadVector(locationLightPosition[i], lights.get(i).getPosition());
-                loadVector(locationLightColour[i], lights.get(i).getColour().asVector3f());
+                Light light = lights.get(i);
+                loadVector(locationLightPosition[i], light.getPosition());
+                loadVector(locationLightColour[i], light.getColour().asVector3f());
+                if (light instanceof PointLight) {
+                    loadVector(locationLightAttenuation[i], ((PointLight) light).getAttenuation());
+                } else {
+                    loadVector(locationLightAttenuation[i], new Vector3f(1, 0, 0));
+                }
             } else {
                 loadVector(locationLightPosition[i], new Vector3f(0, 0, 0));
                 loadVector(locationLightColour[i], new Vector3f(0, 0, 0));
+                loadVector(locationLightAttenuation[i], new Vector3f(1, 0, 0));
             }
         }
     }

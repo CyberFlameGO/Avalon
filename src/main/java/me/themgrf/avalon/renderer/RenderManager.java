@@ -2,7 +2,7 @@ package me.themgrf.avalon.renderer;
 
 import me.themgrf.avalon.entities.Camera;
 import me.themgrf.avalon.entities.Entity;
-import me.themgrf.avalon.entities.Light;
+import me.themgrf.avalon.entities.lights.Light;
 import me.themgrf.avalon.renderer.models.TexturedModel;
 import me.themgrf.avalon.renderer.renderers.EntityRenderer;
 import me.themgrf.avalon.renderer.renderers.TerrainRenderer;
