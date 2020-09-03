@@ -6,7 +6,8 @@ package me.themgrf.avalon.renderer.renderers;
 public class InvalidModelException extends RuntimeException {
 
     /**
-     * Consturctor for creating an InvalidModelException
+     * Constructor for creating an InvalidModelException
+     *
      * @param message The reason given for the error
      */
     public InvalidModelException(String message) {
