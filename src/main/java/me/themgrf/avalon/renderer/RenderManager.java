@@ -25,7 +25,7 @@ public class RenderManager {
     private static final float NEAR_PLANE = 0.1f;
     private static final float FAR_PLANE = 1000;
 
-    private static final RGB SKY_COLOUR = new RGB(127, 184, 184).makeGLCompatible();
+    private static final RGB SKY_COLOUR = new RGB(127, 184, 184);
 
     private final StaticShader shader = new StaticShader();
     private final EntityRenderer entityRenderer;
@@ -48,11 +48,11 @@ public class RenderManager {
         terrainRenderer = new TerrainRenderer(terrainShader, projectionMatrix);
     }
 
-    public void render(Light sun, Camera camera) {
+    public void render(List<Light> lights, Camera camera) {
         prepare();
         shader.start();
         shader.loadSkyColour(SKY_COLOUR);
-        shader.loadLight(sun);
+        shader.loadLights(lights);
         shader.loadViewMatrix(camera);
 
         entityRenderer.render(entities);
@@ -61,7 +61,7 @@ public class RenderManager {
 
         terrainShader.start();
         terrainShader.loadSkyColour(SKY_COLOUR);
-        terrainShader.loadLight(sun);
+        terrainShader.loadLights(lights);
         terrainShader.loadViewMatrix(camera);
         terrainRenderer.render(terrains);
         terrainShader.stop();

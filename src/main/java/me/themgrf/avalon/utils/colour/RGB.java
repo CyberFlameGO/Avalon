@@ -1,5 +1,7 @@
 package me.themgrf.avalon.utils.colour;
 
+import org.lwjgl.util.vector.Vector3f;
+
 public class RGB {
 
     private final float red, green, blue;
@@ -22,7 +24,7 @@ public class RGB {
         return blue;
     }
 
-    public RGB makeGLCompatible() {
-        return new RGB(red/255, green/255, blue/255);
+    public Vector3f asVector3f() {
+        return new Vector3f(red/255, green/255, blue/255);
     }
 }

@@ -1,12 +1,14 @@
 package me.themgrf.avalon.entities;
 
+import me.themgrf.avalon.utils.colour.RGB;
 import org.lwjgl.util.vector.Vector3f;
 
 public class Light {
 
-    private Vector3f position, colour;
+    private Vector3f position;
+    private RGB colour;
 
-    public Light(Vector3f position, Vector3f colour) {
+    public Light(Vector3f position, RGB colour) {
         this.position = position;
         this.colour = colour;
     }
@@ -19,11 +21,11 @@ public class Light {
         this.position = position;
     }
 
-    public Vector3f getColour() {
+    public RGB getColour() {
         return colour;
     }
 
-    public void setColour(Vector3f colour) {
+    public void setColour(RGB colour) {
         this.colour = colour;
     }
 }

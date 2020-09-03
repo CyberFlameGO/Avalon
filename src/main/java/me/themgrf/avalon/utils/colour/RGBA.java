@@ -1,5 +1,7 @@
 package me.themgrf.avalon.utils.colour;
 
+import org.lwjgl.util.vector.Vector4f;
+
 public class RGBA extends RGB {
 
     private final float alpha;
@@ -13,7 +15,7 @@ public class RGBA extends RGB {
         return alpha;
     }
 
-    public RGBA makeGLCompatible() {
-        return new RGBA(getRed()/255, getGreen()/255, getBlue()/255, alpha);
+    public Vector4f asVector4f() {
+        return new Vector4f(getRed()/255, getGreen()/255, getBlue()/255, alpha);
     }
 }

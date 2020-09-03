@@ -14,8 +14,11 @@ import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
 import java.nio.FloatBuffer;
+import java.util.List;
 
 public abstract class ShaderProgram {
+
+    private static final int MAX_LIGHTS = 4;
 
     private final String file;
     private final int programID;
@@ -25,8 +28,8 @@ public abstract class ShaderProgram {
     private int locationTransformationMatrix;
     private int locationProjectionMatrix;
     private int locationViewMatrix;
-    private int locationLightPosition;
-    private int locationLightColour;
+    private int[] locationLightPosition;
+    private int[] locationLightColour;
     private int locationShineDamper;
     private int locationReflectivity;
     private int locationSkyColour;
@@ -50,15 +53,20 @@ public abstract class ShaderProgram {
         locationTransformationMatrix = getUniformLocation("transformationMatrix");
         locationProjectionMatrix = getUniformLocation("projectionMatrix");
         locationViewMatrix = getUniformLocation("viewMatrix");
-        locationLightPosition = getUniformLocation("lightPosition");
-        locationLightColour = getUniformLocation("lightColour");
         locationShineDamper = getUniformLocation("shineDamper");
         locationReflectivity = getUniformLocation("reflectivity");
         locationSkyColour = getUniformLocation("skyColour");
+
+        locationLightPosition = new int[MAX_LIGHTS];
+        locationLightColour = new int[MAX_LIGHTS];
+        for (int i = 0; i < MAX_LIGHTS; i++) {
+            locationLightPosition[i] = getUniformLocation("lightPosition[" + i + "]");
+            locationLightColour[i] = getUniformLocation("lightColour[" + i + "]");
+        }
     }
 
     public void loadSkyColour(RGB rgb) {
-        loadVector(locationSkyColour, new Vector3f(rgb.getRed(), rgb.getGreen(), rgb.getBlue()));
+        loadVector(locationSkyColour, rgb.asVector3f());
     }
 
     public void loadShineVariables(float damper, float reflectivity) {
@@ -74,9 +82,16 @@ public abstract class ShaderProgram {
         loadMatrix(locationProjectionMatrix, matrix);
     }
 
-    public void loadLight(Light light) {
-        loadVector(locationLightPosition, light.getPosition());
-        loadVector(locationLightColour, light.getColour());
+    public void loadLights(List<Light> lights) {
+        for (int i = 0; i < MAX_LIGHTS; i++) {
+            if (i < lights.size()) {
+                loadVector(locationLightPosition[i], lights.get(i).getPosition());
+                loadVector(locationLightColour[i], lights.get(i).getColour().asVector3f());
+            } else {
+                loadVector(locationLightPosition[i], new Vector3f(0, 0, 0));
+                loadVector(locationLightColour[i], new Vector3f(0, 0, 0));
+            }
+        }
     }
 
     public void loadViewMatrix(Camera camera) {

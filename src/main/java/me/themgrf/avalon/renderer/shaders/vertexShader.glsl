@@ -7,14 +7,14 @@ in vec3 normal;
 out vec3 colour;
 out vec2 pass_textureCoords;
 out vec3 surfaceNormal;
-out vec3 toLightVector;
+out vec3 toLightVector[4];
 out vec3 toCameraVector;
 out float visibility;
 
 uniform mat4 transformationMatrix;
 uniform mat4 projectionMatrix;
 uniform mat4 viewMatrix;
-uniform vec3 lightPosition;
+uniform vec3 lightPosition[4];
 
 const float density = 0.0035;
 const float gradient = 5;
@@ -29,7 +29,11 @@ void main(void) {
     //colour = vec3(1, 1.0, 1);
 
     surfaceNormal = (transformationMatrix * vec4(normal, 0.0)).xyz;
-    toLightVector = lightPosition - worldPos.xyz;
+
+    for (int i = 0; i < 4; i++) {
+        toLightVector[i] = lightPosition[i] - worldPos.xyz;
+    }
+
     toCameraVector = (inverse(viewMatrix) * vec4(0,0,0,1)).xyz - worldPos.xyz;
 
     float distance = length(positionRelativeToCamera.xyz) / 1.5;
